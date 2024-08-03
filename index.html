@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheLite Portal</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .centered {
+            text-align: center;
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-btn, .subscribe-btn, .unsubscribe-btn {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .login-btn {
+            background-color: lightgreen;
+        }
+
+        .subscribe-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .subscribed-btn {
+            background-color: gray;
+            color: white;
+        }
+
+        .popup, .unsubscribe-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .unsubscribe-popup button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .unsubscribe-popup .cancel-btn {
+            background-color: lightgray;
+        }
+
+        .unsubscribe-popup .unsubscribe-btn {
+            background-color: lightcoral;
+        }
+
+        .login-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="centered" id="welcome">
+        <h1>Welcome to CheLite Portal</h1>
+        <button class="login-btn" onclick="showLogin()">Login</button>
+        <button class="subscribe-btn" id="subscribe-btn" onclick="toggleSubscribe()">Subscribe</button>
+    </div>
+
+    <div class="login-container" id="login-container">
+        <h2>Login</h2>
+        <form onsubmit="return login()">
+            <input type="text" id="username" placeholder="Username" required><br><br>
+            <input type="password" id="password" placeholder="Password" required><br><br>
+            <button type="submit" class="login-btn">Submit</button>
+        </form>
+    </div>
+
+    <div class="popup" id="popup">
+        <p>Portal is under construction.</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <div class="unsubscribe-popup" id="unsubscribe-popup">
+        <p>Do you want to unsubscribe?</p>
+        <button class="unsubscribe-btn" onclick="unsubscribe()">Unsubscribe</button>
+        <button class="cancel-btn" onclick="cancelUnsubscribe()">Cancel</button>
+    </div>
+
+    <script>
+        function showLogin() {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+        }
+
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            if (username === 'member' && password === 'emp2024') {
+                document.getElementById('popup').style.display = 'block';
+            } else {
+                alert('Invalid credentials');
+            }
+            return false;
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('welcome').style.display = 'block';
+        }
+
+        function toggleSubscribe() {
+            var subscribeBtn = document.getElementById('subscribe-btn');
+            if (subscribeBtn.classList.contains('subscribe-btn')) {
+                subscribeBtn.classList.remove('subscribe-btn');
+                subscribeBtn.classList.add('subscribed-btn');
+                subscribeBtn.innerHTML = 'Subscribed';
+                localStorage.setItem('subscribed', 'true');
+            } else {
+                document.getElementById('unsubscribe-popup').style.display = 'block';
+            }
+        }
+
+        function unsubscribe() {
+            var subscribeBtn = document.getElementById('subscribe-btn');
+            subscribeBtn.classList.remove('subscribed-btn');
+            subscribeBtn.classList.add('subscribe-btn');
+            subscribeBtn.innerHTML = 'Subscribe';
+            localStorage.removeItem('subscribed');
+            document.getElementById('unsubscribe-popup').style.display = 'none';
+        }
+
+        function cancelUnsubscribe() {
+            document.getElementById('unsubscribe-popup').style.display = 'none';
+        }
+
+        window.onload = function() {
+            var subscribed = localStorage.getItem('subscribed');
+            if (subscribed === 'true') {
+                var subscribeBtn = document.getElementById('subscribe-btn');
+                subscribeBtn.classList.remove('subscribe-btn');
+                subscribeBtn.classList.add('subscribed-btn');
+                subscribeBtn.innerHTML = 'Subscribed';
+            }
+        };
+    </script>
+</body>
+</html>
